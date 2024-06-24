@@ -88,9 +88,26 @@ class Odds_Comparison_Public_Class {
 	public function register_shortcodes_odss(){
 
 		add_shortcode( 'odds_comparison','show_odds'  );
-		function show_odds(  ) {
+		function show_odds() {
 			// Fetch and display odds
-        $odds = $this->fetch_odds();
+        $odds = [];
+		$bookmakers = [
+			'Bookmaker 1' => 'https://api.bookmaker1.com/odds',
+			'Bookmaker 2' => 'https://api.bookmaker2.com/odds',
+			// Add more bookmakers and their API endpoints here
+		];
+
+		foreach ($bookmakers as $bookmaker => $url) {
+			$response = wp_remote_get($url);
+			if (is_wp_error($response)) {
+				continue;
+			}
+			$body = wp_remote_retrieve_body($response);
+			$data = json_decode($body, true);
+			if (json_last_error() === JSON_ERROR_NONE) {
+				$odds[$bookmaker] = $data;
+			}
+		}
         ob_start();
         echo '<div class="odds-comparison">';
         foreach ($odds as $bookmaker => $data) {
@@ -106,18 +123,5 @@ class Odds_Comparison_Public_Class {
 		}
 	}
 	
-    private function fetch_odds() {
-        // Fetch odds from external APIs
-        $odds = [];
-        // Example data, replace with actual API calls
-        $odds['Bookmaker 1'] = [
-            'Event 1' => '1.5',
-            'Event 2' => '2.0',
-        ];
-        $odds['Bookmaker 2'] = [
-            'Event 1' => '1.6',
-            'Event 2' => '1.9',
-        ];
-        return $odds;
-    }
+
 }
