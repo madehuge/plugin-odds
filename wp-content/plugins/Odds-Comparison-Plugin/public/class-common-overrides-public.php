@@ -84,4 +84,40 @@ class Odds_Comparison_Public_Class {
 		wp_enqueue_script( $this->plugin_name, Odds_Comparison_GLOBAL_PATH . 'public/js/front-end.js', array( 'jquery' ), $this->version, false );
 
 	}
+
+	public function register_shortcodes_odss(){
+
+		add_shortcode( 'odds_comparison','show_odds'  );
+		function show_odds(  ) {
+			// Fetch and display odds
+        $odds = $this->fetch_odds();
+        ob_start();
+        echo '<div class="odds-comparison">';
+        foreach ($odds as $bookmaker => $data) {
+            echo '<div class="bookmaker">';
+            echo '<h2>' . esc_html($bookmaker) . '</h2>';
+            foreach ($data as $event => $odd) {
+                echo '<p>' . esc_html($event) . ': ' . esc_html($odd) . '</p>';
+            }
+            echo '</div>';
+        }
+        echo '</div>';
+        return ob_get_clean();
+		}
+	}
+	
+    private function fetch_odds() {
+        // Fetch odds from external APIs
+        $odds = [];
+        // Example data, replace with actual API calls
+        $odds['Bookmaker 1'] = [
+            'Event 1' => '1.5',
+            'Event 2' => '2.0',
+        ];
+        $odds['Bookmaker 2'] = [
+            'Event 1' => '1.6',
+            'Event 2' => '1.9',
+        ];
+        return $odds;
+    }
 }

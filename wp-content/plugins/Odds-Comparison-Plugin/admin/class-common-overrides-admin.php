@@ -112,13 +112,13 @@ class Odds_Comparison_Admin_Class {
             'Odds Comparison', 
             'manage_options', 
             'odds-comparison', 
-            array($this, 'display_admin_page'), 
+            array($this, 'show_admin_page'), 
             'dashicons-chart-line', 
             6
         );
     }
 
-    public function display_admin_page() {
+    public function show_admin_page() {
         // Admin page content
         echo '<div class="wrap">';
         echo '<h1>Odds Comparison Settings</h1>';
